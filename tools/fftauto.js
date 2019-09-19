@@ -43,15 +43,6 @@ const User = [
 },
 {
   type:'input',
-  name:'text',
-  message:'Insert Text Comment (Use [|] if more than 1):',
-  validate: function(value){
-    if(!value) return 'Can\'t Empty';
-    return true;
-  }
-},
-{
-  type:'input',
   name:'ittyw',
   message:'Input Total of Target You Want (ITTYW):',
   validate: function(value){
@@ -120,15 +111,6 @@ async function ngefollow(session,accountId){
   }
 }
 
-async function ngeComment(session, id, text){
-  try {
-    await Client.Comment.create(session, id, text);
-    return true;
-  } catch(e){
-    return false;
-  }
-}
-
 async function ngeLike(session, id){
   try{
     await Client.Like.create(session, id)
@@ -138,7 +120,7 @@ async function ngeLike(session, id){
   }
 }
 
-const CommentAndLike = async function(session, accountId, text){
+const CommentAndLike = async function(session, accountId){
   var result;
 
   const feed = new Client.Feed.UserMedia(session, accountId);
@@ -152,14 +134,12 @@ const CommentAndLike = async function(session, accountId, text){
   if (result.length > 0) {
     const task = [
     ngefollow(session, accountId),
-    ngeComment(session, result[0].params.id, text),
     ngeLike(session, result[0].params.id)
     ]
     const [Follow,Comment,Like] = await Promise.all(task);
     const printFollow = Follow ? chalk`{green Follow}` : chalk`{red Follow}`;
-    const printComment = Comment ? chalk`{green Comment}` : chalk`{red Comment}`;
     const printLike = Like ? chalk`{green Like}` : chalk`{red Like}`;
-    return chalk`{bold.green ${printFollow}:${printComment}:${printLike} » {bold.cyan ${text}}}`;
+    return chalk`{bold.green ${printFollow}:${printLike} » {bold.cyan ${text}}}`;
   }
   return chalk`{cyan {bold.red (SKIPPED)} TIMELINE EMPTY!}`
 };
@@ -183,7 +163,7 @@ const Followers = async function(session, id){
   }
 }
 
-const Excute = async function(User, TargetUsername, Text, Sleep, ittyw){
+const Excute = async function(User, TargetUsername, Sleep, ittyw){
   try {
     console.log(chalk`{yellow \n? Try to Login . . .}`)
     const doLogin = await Login(User);
@@ -224,14 +204,13 @@ const Excute = async function(User, TargetUsername, Text, Sleep, ittyw){
 }
 console.log(chalk`{bold.cyan
   Ξ TITLE  : FFT [FOLLOW-LIKE-COMMENT TARGET FOLLOWER]
-  Ξ CODE   : CYBER SCREAMER CCOCOT (ccocot@bc0de.net)
+  Ξ CODE   : UBFEC
   Ξ STATUS : {bold.green [+ITTWY]} & {bold.yellow [TESTED]}}
       `);
 inquirer.prompt(User)
 .then(answers => {
-  var text = answers.text.split('|');
   Excute({
     username:answers.username,
     password:answers.password
-  },answers.target,text,answers.sleep,answers.ittyw);
+  },answers.target,answers.sleep,answers.ittyw);
 })
