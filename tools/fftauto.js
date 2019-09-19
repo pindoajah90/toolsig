@@ -139,7 +139,7 @@ const CommentAndLike = async function(session, accountId){
     const [Follow,Comment,Like] = await Promise.all(task);
     const printFollow = Follow ? chalk`{green Follow}` : chalk`{red Follow}`;
     const printLike = Like ? chalk`{green Like}` : chalk`{red Like}`;
-    return chalk`{bold.green ${printFollow}:${printLike} » {bold.cyan ${text}}}`;
+    return chalk`{bold.green ${printFollow}:${printLike}`;
   }
   return chalk`{cyan {bold.red (SKIPPED)} TIMELINE EMPTY!}`
 };
@@ -184,8 +184,7 @@ const Excute = async function(User, TargetUsername, Sleep, ittyw){
         timeNow = `${timeNow.getHours()}:${timeNow.getMinutes()}:${timeNow.getSeconds()}`
         await Promise.all(TargetResult[i].map(async(akun) => {
           if (!getFollowers.includes(akun.id) && akun.params.isPrivate === false) {
-            var ranText = Text[Math.floor(Math.random() * Text.length)];
-            const ngeDo = await CommentAndLike(doLogin.session, akun.id, ranText)
+            const ngeDo = await CommentAndLike(doLogin.session, akun.id)
             console.log(chalk`{magenta ⌭ ${timeNow}}: ${akun.params.username} ➾ ${ngeDo}`)
           } else {
             console.log(chalk`{magenta ⌭ ${timeNow}}: ${akun.params.username} ➾ {bold.red SKIPPED} ➾ PRIVATE/FOLLOWED!`)
