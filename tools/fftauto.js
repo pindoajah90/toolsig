@@ -139,7 +139,7 @@ const CommentAndLike = async function(session, accountId){
     const [Follow,Comment,Like] = await Promise.all(task);
     const printFollow = Follow ? chalk`{green Follow}` : chalk`{red Follow}`;
     const printLike = Like ? chalk`{green Like}` : chalk`{red Like}`;
-    return chalk`{bold.green ${printFollow}:${printLike}`;
+    return chalk`{bold.green ${printFollow}:${printLike} » {bold.cyan ${text}}}`;
   }
   return chalk`{cyan {bold.red (SKIPPED)} TIMELINE EMPTY!}`
 };
